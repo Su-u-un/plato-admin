@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--    <el-button @click="dataLine()">test</el-button>-->
+    <el-button @click="dataRegion">test</el-button>
     <!--访问曲线-->
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <div class="tabBar">
@@ -33,7 +33,7 @@
         <div style="width: 150px">
           <div class="legendItem">TOP1-省份</div>
         </div>
-        <echarts-china />
+        <echarts-china :chart-data="dataChina"/>
       </div>
     </div>
     <!--24h访问曲线-->
@@ -104,7 +104,7 @@ import echartsChina from "../echarts/echartsChina";
 import echartsWorld from "../echarts/echartsWorld";
 import echartsBar from "../echarts/echartsBar";
 //网络请求
-import {getTrend} from "../../../network/visual/statistic";
+import {getTrend,getRegion} from "../../../network/visual/statistic";
 
 const barChartData = {
   day:{
@@ -137,8 +137,14 @@ export default {
   },
   data(){
     return{
+      //线图数据
       lineChartData: {},
+      //线图表格数据
       lineTable:[],
+      //中国地区数据
+      dataChina:[],
+      //世界地区数据
+      dataWorld:[],
       barDay:barChartData.day,
       barWeek:barChartData.week,
       //线图的统计数
@@ -196,11 +202,29 @@ export default {
         xAxis
       }
     },
+    //访问地区请求
+    async dataRegion(){
+      this.dataChina = await this.regionTrend(this.dataCode,this.dataDate)
+    },
+    //请求地区uvpv
+    async regionTrend(code,date){
+      let test = []
+      await getRegion(code,date[0],date[1]).then(res=>{
+        for (let obj of res.data.data) {
+          test.push({
+            name: obj.province.slice(0,2),
+            value: parseInt(obj.pv),
+          });
+        }
+      })
+      return test;
+    }
   },
   watch:{
     dataDate:{
       handler() {
         this.dataLine()
+        this.dataRegion()
       },
       immediate:true
     },
