@@ -5,7 +5,7 @@
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <div class="tabBar">
         tabbar
-<!--        <el-button @click="isShow = !isShow">切换</el-button>-->
+        <el-button @click="isShow = !isShow">切换</el-button>
       </div>
       <div style="display: flex;margin-top: 20px" v-show="isShow">
         <div style="width: 150px">
@@ -16,8 +16,11 @@
         <echarts-line :chart-data="lineChartData"/>
       </div>
       <div v-show="!isShow">
-        <el-table>
-          111
+        <el-table :data="lineTable" height="450">
+          <el-table-column label="时间" prop="interval"></el-table-column>
+          <el-table-column label="访问次数" prop="pv"></el-table-column>
+          <el-table-column label="访问人数" prop="uv"></el-table-column>
+          <el-table-column label="访问IP数" prop="ip"></el-table-column>
         </el-table>
       </div>
     </div>
@@ -114,8 +117,6 @@ const barChartData = {
   }
 }
 
-
-
 export default {
   name: "dataForm",
   props:{
@@ -137,6 +138,7 @@ export default {
   data(){
     return{
       lineChartData: {},
+      lineTable:[],
       barDay:barChartData.day,
       barWeek:barChartData.week,
       //线图的统计数
@@ -163,17 +165,30 @@ export default {
       let ipNum = 0
       let pvNum = 0
       let uvNum = 0
+      let n = []
       await getTrend(code,date[0],date[1]).then(res=>{
-        for(let obj of res.data.data){
-          line.pv.push(parseInt(obj.pv))
-          line.uv.push(parseInt(obj.uv))
-          line.ip.push(parseInt(obj.ip))
-          xAxis.push(obj.interval)
-          ipNum = parseInt(obj.ip) + ipNum
-          pvNum = parseInt(obj.pv) + pvNum
-          uvNum = parseInt(obj.uv) + uvNum
+        if(res.data.data!==0){
+          for(let obj of res.data.data){
+            //左侧统计
+            line.pv.push(parseInt(obj.pv))
+            line.uv.push(parseInt(obj.uv))
+            line.ip.push(parseInt(obj.ip))
+            //统计图数据
+            xAxis.push(obj.interval)
+            ipNum = parseInt(obj.ip) + ipNum
+            pvNum = parseInt(obj.pv) + pvNum
+            uvNum = parseInt(obj.uv) + uvNum
+            //列表数据
+            n.push({
+              interval:obj.interval,
+              ip:obj.ip,
+              pv:obj.pv,
+              uv:obj.uv
+            })
+          }
+          this.line = {ip:ipNum,pv:pvNum,uv:uvNum}
+          this.lineTable = n
         }
-        this.line = {ip:ipNum,pv:pvNum,uv:uvNum}
       })
       // console.log(ipNum, pvNum, uvNum);
       return {

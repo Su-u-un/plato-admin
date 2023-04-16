@@ -373,7 +373,7 @@ export default {
       pageSize:10,
       //开始的页面和前往第x页
       currentPage: 1,
-      //本地模拟表格数据
+      //表格数据
       tableData:[],
       //创建短链日期选择器的规则
       pickerOptions1: {
@@ -526,7 +526,6 @@ export default {
         }
       }
       this.tableData = n
-      // console.log(this.tableData);
     },
     //今日的访问数据
     async todayTrend(code){
