@@ -1,6 +1,6 @@
 import {visual} from "../visual";
 
-//分页查询
+//访问记录
 export function getPage(code,page,size){
   return visual({
     method:'post',
