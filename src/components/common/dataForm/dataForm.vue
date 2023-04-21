@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button @click="fingerPrint(this.dataCode,this.dataDate)">test</el-button>
     <!--访问曲线-->
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <div class="tabBar">
@@ -259,6 +258,7 @@ export default {
         xAxis
       }
     },
+
     //访问地区请求
     async dataRegion(){
       let temp = await this.regionTrend(this.dataCode,this.dataDate)
@@ -283,6 +283,7 @@ export default {
       })
       return {pv,uv};
     },
+
     //浏览器指纹处理
     async dataType(){
       let temp = await this.fingerPrint(this.dataCode,this.dataDate)
@@ -335,7 +336,7 @@ export default {
         temp = res.data.data
       })
       return temp
-    }
+    },
   },
   watch:{
     dataDate:{

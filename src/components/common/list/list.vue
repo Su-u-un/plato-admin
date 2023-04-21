@@ -31,13 +31,16 @@
 export default {
   name:'list',
   props:{
-    list:[]
+    list:{
+      type:Array,
+      required:true
+    }
   },
   data() {
     return {
       dragIndex: "",
       enterIndex: "",
-      dragId:"",
+      dragId:''
     };
   },
   methods: {
@@ -65,13 +68,6 @@ export default {
       this.$store.state.group = val
     }
   },
-  //为了能让刚进界面的时候就有数据
-  watch:{
-    list:function (val){
-      this.dragId = val[0].id
-      this.$store.state.group = val[0]
-    }
-  }
 };
 </script>
 <style scoped>

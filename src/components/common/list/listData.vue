@@ -241,6 +241,7 @@
             {{this.dialogData.title}}
           </div>
           <div>
+            <!--日期选择器-->
             <div style="display: flex">
               <div>
                 <div class="tabbarItem" :class="{active:formContent}" @click="contentSkip()">数据图表</div>
@@ -260,16 +261,14 @@
             </div>
             <!--数据图表-->
             <data-form
-              class="content"
               v-show="formContent"
               :data-code="this.dialogData.code"
               :data-date="this.dialogDate"/>
-            <div v-show="formHistory">
-              访问记录
-              <div class="foot">
-                页码
-              </div>
-            </div>
+            <!--访问列表-->
+            <data-list
+              v-show="formHistory"
+              :data-code="this.dialogData.code"
+              :data-date="this.dialogDate"/>
           </div>
         </el-dialog>
         <!--页码-->
@@ -293,6 +292,7 @@
 <script>
 //组件
 import dataForm from "../dataForm/dataForm";
+import dataList from "../dataList/dataList";
 //网络请求
 import {createLink, pageLink} from "../../../network/link/shortLink";
 import {getTrend} from "../../../network/visual/statistic"
@@ -303,7 +303,8 @@ export default {
     list:[]
   },
   components:{
-    dataForm
+    dataForm,
+    dataList
   },
   data(){
     //url的校验规则
@@ -625,7 +626,7 @@ export default {
 .dataCard{
   display: flex;
   flex-direction: column;
-  width: 100%;
+  /*width: 100%;*/
   height: 100%;
   background-color: white;
 }
@@ -638,7 +639,7 @@ export default {
   text-align: center;
 }
 .linkData{
-  width:100%;
+  /*width:100%;*/
   height: 100%;
 }
 

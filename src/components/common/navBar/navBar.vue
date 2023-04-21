@@ -85,40 +85,6 @@
         </div>
       </div>
     </div>
-
-
-      <!--总的navbar-->
-<!--      <div style="display: flex">-->
-<!--        &lt;!&ndash;logo加菜单&ndash;&gt;-->
-<!--        <div style="display: flex">-->
-<!--          <div class="logo" style="display: flex">-->
-<!--            <i class="el-icon-cold-drink"/>-->
-<!--            <span>无码短链接</span>-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--          <div class="menu-item">-->
-<!--            我的空间-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash;搜索框+反馈+头像菜单&ndash;&gt;-->
-<!--        <div style="display: flex">-->
-
-<!--        </div>-->
-<!--      </div>-->
     </el-header>
 </template>
 

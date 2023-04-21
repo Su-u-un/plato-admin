@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <el-container class="is-vertical">
+    <el-container
+     direction="vertical">
       <nav-bar v-show="$route.meta.isshow"/>
       <router-view/>
     </el-container>
-<!--    <test></test>-->
   </div>
 </template>
 

@@ -1,6 +1,24 @@
-# demo01
+# 短链系统
 
 > A Vue.js project
+
+## 功能
+
+- 登录/注销
+
+- 权限验证
+  - 页面权限
+  - 权限配置
+  
+- 表格
+  - 短链信息表格
+  - 访问记录表格
+  
+- 组件
+  - 列表拖拽
+  - 顶部导航栏
+  
+- ECharts图表
 
 ## Build Setup
 
@@ -18,4 +36,6 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 布局
+
+el-container
