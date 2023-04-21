@@ -2,7 +2,7 @@
   <div id="app">
     <el-container
      direction="vertical">
-      <nav-bar v-show="$route.meta.isshow"/>
+<!--      <nav-bar v-show="$route.meta.isshow"/>-->
       <router-view/>
     </el-container>
   </div>
@@ -10,12 +10,10 @@
 
 <script>
 import navBar from "./components/common/navBar/navBar";
-import test from "./components/test";
 export default {
   name: 'App',
   components:{
     navBar,
-    test
   },
   data(){
     return{

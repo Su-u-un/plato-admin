@@ -59,10 +59,9 @@
 import NavBar from "../components/common/navBar/navBar";
 import List from "../components/common/list/list";
 import ListData from "../components/common/list/listData";
-import test from "../components/test";
 //网络请求
-import {createGroup,listGroup} from "../network/link/group"
-import {domain} from "../network/link/domain";
+import {createGroup,listGroup} from "@/network/link/group"
+
 
 export default {
   name: "space",
@@ -78,7 +77,6 @@ export default {
     NavBar,
     List,
     ListData,
-    test,
   },
   methods:{
     createGroup(title){

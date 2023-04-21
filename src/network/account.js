@@ -2,8 +2,7 @@ import axios from "axios"
 
 export function account(config){
   const accountInstance = axios.create({
-    baseURL:'http://10.10.26.139:8091/api',
-    timeout:5000,
+    baseURL:'http://10.10.26.139:8091/api'
   })
 
   //2、axios的拦截器

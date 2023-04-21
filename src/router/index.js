@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import login from "../views/login";
-import {getToken} from "../utils/localStorage";
+import {getToken} from "@/utils/localStorage";
 
 Vue.use(Router)
 
@@ -13,14 +12,14 @@ const router = new Router({
     },
     {
       path:'/login',
-      component:login
+      component:()=>import('@/views/login/index')
     },
     {
       path:'/space',
       meta:{
         isshow:true
       },
-      component:()=>import('../views/space'),
+      component:()=>import('@/views/space'),
       // children:[
       //   {
       //     path:'1',
@@ -33,14 +32,14 @@ const router = new Router({
       meta:{
         isshow:true
       },
-      component:()=>import('../views/custom')
+      component:()=>import('@/views/custom')
     },
     {
       path:'/openAPI',
       meta:{
         isshow:true
       },
-      component:()=>import('../views/openAPI')
+      component:()=>import('@/views/openAPI')
     }
   ]
 })
