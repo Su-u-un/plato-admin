@@ -9,7 +9,7 @@
               style="margin-right: 10px"
               type="text"
               v-model="link"
-              placeholder="请输入http://或https://"
+              placeholder="请输入http://或https://开头的链接"
               :clearable=true
               >
             </el-input>
@@ -37,7 +37,7 @@
                     <el-form-item label="短链分组" prop="name">
                       <el-select v-model="form.name">
                         <el-option
-                          v-for="(item,index) in list"
+                          v-for="(item,index) in this.$store.state.list"
                           :key="index"
                           :label="item.title"
                           :value="item.id"
@@ -85,19 +85,21 @@
             :data="tableData"
             ref="tableRef"
             fit
+            :row-style="{height: '80px'}"
             height="700"
+
             style="width: 100%;overflow: auto">
             <!--多选框表头-->
             <el-table-column type="selection"/>
             <!--短链信息-->
-            <el-table-column>
+            <el-table-column prop="create_time" min-width="180">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
                   effect="dark"
                   content="设置排序"
                   placement="top"
-                  :open-delay="2000">
+                  :open-delay="1000">
                   <el-dropdown placement="bottom">
                     <span class="el-dropdown-link">
                       短链信息<i class="el-icon-arrow-down el-icon--right"/>
@@ -110,15 +112,15 @@
               </template>
               <!--单元格嵌套模板-->
               <template v-slot="{row}">
-                <div  style="display: flex;">
-                  <div>
-                    svg
+                <div  style="display: flex;align-items: center">
+                  <div class="icon">
+                    <i class="el-icon-platform-eleme"></i>
                   </div>
                   <div>
-                    <div >
+                    <div class="row1">
                       {{row.title}}
                     </div>
-                    <div>
+                    <div class="row2">
                       {{ row.create_time }}
                     </div>
                   </div>
@@ -126,37 +128,52 @@
               </template>
             </el-table-column>
             <!--短链接网址-->
-            <el-table-column label="短链接网址">
+            <el-table-column label="短链接网址" min-width="250">
               <template v-slot="{row}">
                 <div style="display: flex;">
-                  <div>
-                    http://{{row.domain}}/{{row.code}}
+                  <div style="width: 200px">
                     <div>
+                      http://{{row.domain}}/{{row.code}}
+                    </div>
+                    <div class="row2" style="color: #acafb6">
                       {{ row.original_url }}
                     </div>
                   </div>
+                  <!--二维码功能-->
                   <div>
-                    二维码和复制
+<!--                    <svg t="1682239036129" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2710" width="20" height="20">-->
+<!--                      <path d="M597.333333 597.333333h85.333334v-85.333333h85.333333v128h-85.333333v42.666667h-85.333334v-42.666667h-85.333333v-128h85.333333v85.333333z m-384-85.333333h256v256H213.333333v-256z m85.333334 85.333333v85.333334h85.333333v-85.333334H298.666667zM213.333333 213.333333h256v256H213.333333V213.333333z m85.333334 85.333334v85.333333h85.333333V298.666667H298.666667z m213.333333-85.333334h256v256h-256V213.333333z m85.333333 85.333334v85.333333h85.333334V298.666667h-85.333334z m85.333334 384h85.333333v85.333333h-85.333333v-85.333333z m-170.666667 0h85.333333v85.333333h-85.333333v-85.333333z" fill="#d4237a" p-id="2711"></path>-->
+<!--                    </svg>-->
+                    <el-button
+                      title="复制短链接"
+                      type="text"
+                      @click="handleCopy(row.domain,row.code)"
+                      class="el-icon-copy-document"/>
                   </div>
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="50px">
+              <template>
+                <div>今日</div>
+              </template>
+            </el-table-column>
             <!--访问次数-->
-            <el-table-column>
+            <el-table-column prop="pv" min-width="80">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
                   effect="dark"
                   content="设置排序"
                   placement="top"
-                  :open-delay="2000">
+                  :open-delay="1000">
                   <el-dropdown placement="bottom">
                     <span>
                       访问次数<i class="el-icon-arrow-down el-icon--right"/>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item  @click="handleSort('pv')">今日访问次数</el-dropdown-item>
-                      <el-dropdown-item  @click="handleSort('')">累计访问次数</el-dropdown-item>
+                      <el-dropdown-item  @click.native="handleSort('pv')">今日访问次数</el-dropdown-item>
+<!--                      <el-dropdown-item  @click.native="handleSort('')">累计访问次数</el-dropdown-item>-->
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-tooltip>
@@ -164,73 +181,74 @@
               <!--单元格嵌套模板-->
               <template v-slot="{row}">
                 <div>
-                  <span>今日：{{row.pv }}</span>
-                  <span>累计：无</span>
+                  <span>{{row.pv }}</span>
+<!--                  <span>累计：无</span>-->
                 </div>
               </template>
             </el-table-column>
             <!--访问人数-->
-            <el-table-column>
+            <el-table-column prop="uv" min-width="80">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
                   effect="dark"
                   content="设置排序"
                   placement="top"
-                  :open-delay="2000">
+                  :open-delay="1000">
                   <el-dropdown placement="bottom">
                     <span class="el-dropdown-link">
                       访问人数<i class="el-icon-arrow-down el-icon--right"/>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item  @click.native="handleSort('uv')">今日访问人数</el-dropdown-item>
-                      <el-dropdown-item  @click.native="handleSort('')">累计访问人数</el-dropdown-item>
+<!--                      <el-dropdown-item  @click.native="handleSort('')">累计访问人数</el-dropdown-item>-->
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-tooltip>
               </template>
               <!--单元格嵌套模板-->
-              <template v-slot="{row}">
-                <div>
-                  <span>今日：{{row.uv }}</span>
-                  <span>累计：无</span>
-                </div>
-              </template>
+<!--              <template v-slot="{row}">-->
+<!--                <div>-->
+<!--                  <span>{{row.uv }}</span>-->
+<!--                  <span>累计：无</span>-->
+<!--                </div>-->
+<!--              </template>-->
             </el-table-column>
             <!--IP数-->
-            <el-table-column>
+            <el-table-column prop="ip" min-width="80">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
                   effect="dark"
                   content="设置排序"
                   placement="top"
-                  :open-delay="2000">
+                  :open-delay="1000">
                   <el-dropdown placement="bottom">
                     <span class="el-dropdown-link">
                       IP数<i class="el-icon-arrow-down el-icon--right"/>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item  @click.native="handleSort('ip')">今日IP数</el-dropdown-item>
-                      <el-dropdown-item  @click.native="handleSort('')">累计IP数</el-dropdown-item>
+<!--                      <el-dropdown-item  @click.native="handleSort('')">累计IP数</el-dropdown-item>-->
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-tooltip>
               </template>
               <!--单元格嵌套模板-->
-              <template v-slot="{row}">
-                <div>
-                  <span>今日：{{row.ip }}</span>
-                  <span>累计：无</span>
-                </div>
-              </template>
+<!--              <template v-slot="{row}">-->
+<!--                <div>-->
+<!--                  <span>今日：{{row.ip }}</span>-->
+<!--                  <span>累计：无</span>-->
+<!--                </div>-->
+<!--              </template>-->
             </el-table-column>
             <!--查看图表、编辑-->
             <el-table-column
-              label="操作">
+              label="操作"
+              min-width="150">
               <template v-slot="{row}">
                 <el-button type="text" size="small"  @click=showDialog(row)>查看</el-button>
-                <el-button type="text" size="small">没写</el-button>
+                <el-button type="text" size="small">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -291,8 +309,8 @@
 
 <script>
 //组件
-import dataForm from "../dataForm/dataForm";
-import dataList from "../dataList/dataList";
+import dataForm from "../../../components/common/dataForm/dataForm";
+import dataList from "../../../components/common/dataList/dataList";
 //网络请求
 import {createLink, pageLink} from "../../../network/link/shortLink";
 import {getTrend} from "../../../network/visual/statistic"
@@ -441,14 +459,6 @@ export default {
     }
   },
   methods:{
-    // //dialog自适应宽度
-    // setDialogWidth() {
-    //   var val = document.body.clientWidth
-    //   const def = 1000 // 默认宽度
-    //   if (val < def) {
-    //     this.dialogWidth = def + 'px'
-    //   }
-    // },
     //页面跳转事件
     handleCurrentChange(val) {
       this.pageLink(val,this.pageSize,this.$store.state.group.id)
@@ -459,11 +469,32 @@ export default {
     },
     //列表排序事件
     handleSort(val){
-      this.$nextTick(() => {
-        console.log(this.$refs.table);
-        this.$refs.tableRef.sort(val, 'descending');
-      });
-
+      this.$refs.tableRef.sort(val, 'descending');
+    },
+    //复制短链按钮
+    handleCopy(a,b){
+      //浏览器提供的复制API
+      let text = 'http://' +a+ '/' + b
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          this.$message.success('复制成功!')
+        })
+        .catch((err) => {
+          console.error('Error in copying text: ', err);
+        });
+      //弃用的execCommand复制方法
+      // let textarea = document.createElement('textarea');
+      // 将文本域的值设置为要复制的文本
+      // textarea.value = 'http://' +a+ '/' + b;
+      // 将文本域添加到页面中
+      // document.body.appendChild(textarea);
+      // 选择文本域中的文本
+      // textarea.select();
+      // 执行复制命令
+      // document.execCommand('copy');
+      // 移除文本域
+      // document.body.removeChild(textarea);
+      // this.$message.success('复制成功!')
     },
     //创建短链按钮
     createLink(){
@@ -504,7 +535,7 @@ export default {
     //请求分页数据
     async pageLink(page,size,group_id){
       //定义一个接受分页数据的临时数组
-      let n = new Array(size)
+      let n = []
       let test = []
       //数组内填充相应的对象
       await pageLink(page,size,group_id).then(res=>{
@@ -603,18 +634,10 @@ export default {
       this.form.name = this.$store.state.group.title
       this.form.group_id = this.$store.state.group.id
       this.link_sum = this.$store.state.group.link_sum - 0
-
       //改变就更新分页
       this.pageLink(this.currentPage,this.pageSize,this.$store.state.group.id)
     },
   },
-  // mounted() {
-  //   window.onresize = () => {
-  //     return (() => {
-  //       this.setDialogWidth()
-  //     })()
-  //   }
-  // }
 }
 </script>
 
@@ -642,7 +665,18 @@ export default {
   /*width:100%;*/
   height: 100%;
 }
-
+.el-table .icon{
+  font-size: 30px;
+  margin-right: 5px;
+}
+.el-table .row1{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.el-table .row2{
+  font-size: 12px;
+  line-height: 18px;
+}
 .dialogTabbar{
   display: flex;
   width:100%

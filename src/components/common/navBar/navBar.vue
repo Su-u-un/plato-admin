@@ -184,15 +184,13 @@ export default {
 .el-dropdown-link {
   cursor: pointer;
   color: #409EFF;
+  width: 100%;
 }
 .demonstration {
   display: block;
   color: #8492a6;
   font-size: 14px;
   margin-bottom: 20px;
-}
-.el-dropdown-link {
-  cursor: pointer;
 }
 .avatar-container {
   margin-right: 30px;

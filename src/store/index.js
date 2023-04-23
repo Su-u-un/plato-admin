@@ -13,7 +13,9 @@ const state = {
   key1:0,
   //token
   token:getToken()||{},
-  //点击分组传入listData的group_id
+  //含有分组的列表
+  list:[],
+  //含有链接的分组
   group:{}
 };
 

@@ -19,7 +19,7 @@ const router = new Router({
       meta:{
         isshow:true
       },
-      component:()=>import('@/views/space'),
+      component:()=>import('@/views/space/index'),
       // children:[
       //   {
       //     path:'1',

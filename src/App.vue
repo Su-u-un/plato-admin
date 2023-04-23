@@ -2,7 +2,7 @@
   <div id="app">
     <el-container
      direction="vertical">
-<!--      <nav-bar v-show="$route.meta.isshow"/>-->
+      <nav-bar v-show="$route.meta.isshow"/>
       <router-view/>
     </el-container>
   </div>

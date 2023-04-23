@@ -112,7 +112,6 @@
 
 <script>
 import {setToken} from "@/utils/localStorage";
-import {getMesCode} from "@/network/account/verify";
 
 export default {
   name: "login",

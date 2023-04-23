@@ -24,7 +24,7 @@
               </el-form>
               <div slot="footer">
                 <el-button size="mini" @click="dialogCreateGroup = false">取消</el-button>
-                <el-button type="primary" size="mini" @click=createGroup(title)>确定</el-button>
+                <el-button type="primary" size="mini" @click=createGroup()>确定</el-button>
               </div>
             </el-dialog>
           </div>
@@ -32,7 +32,7 @@
         <!--可拖拽列表-->
         <div style="height:100%">
           <div class="groupList">
-            <list :list="group"/>
+            <group-list :key="key"/>
           </div>
         </div>
         <!--回收站-->
@@ -49,19 +49,14 @@
         </div>
       </el-aside>
       <!--右侧界面-->
-      <ListData :list="group"/>
+      <link-table :list="group" />
     </el-container>
-<!--  <test></test>-->
 </template>
 
 <script>
 //组件
-import NavBar from "../components/common/navBar/navBar";
-import List from "../components/common/list/list";
-import ListData from "../components/common/list/listData";
-//网络请求
-import {createGroup,listGroup} from "@/network/link/group"
-
+import groupList from "./components/groupList";
+import linkTable from "./components/linkTable";
 
 export default {
   name: "space",
@@ -70,40 +65,47 @@ export default {
       title:'',
       count:'',
       dialogCreateGroup:false,
-      group:[]
+      group:[],
+      //改变key更新左侧列表
+      key:0,
     }
   },
   components: {
-    NavBar,
-    List,
-    ListData,
+    groupList,
+    linkTable,
   },
   methods:{
-    createGroup(title){
+    createGroup(){
       this.dialogCreateGroup = false
-      createGroup(title).then(res=>{
-        listGroup().then(res=>{
-          // console.log(res);
-          this.count = res.data.data.length
-          this.group = res.data.data
-        }).catch(err=>{
-          console.log(err);
-        })
+      this.$store.dispatch('createGroup',this.title).then(res=>{
+        if(res.data.code === 0){
+          this.$message.success('创建成功')
+          this.linkGroup()
+          this.key+=1
+        }
+        else
+          this.$message.error('error');
       }).catch(err=>{
         console.log(err);
       })
     },
+    //请求分组数据
+    linkGroup(){
+      this.$store.dispatch('linkGroup').then(res=>{
+        // console.log(res);
+        this.count = res.data.data.length
+        this.$store.state.list = res.data.data
+        this.$store.state.group = res.data.data[0]
+        this.key+=1
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
   },
   //钩子函数
   created() {
     //进界面前就拿到分组的基本数据
-    listGroup().then(res=>{
-      // console.log(res);
-      this.count = res.data.data.length
-      this.group = res.data.data
-    }).catch(err=>{
-      console.log(err);
-    })
+    this.linkGroup()
   }
 }
 </script>
