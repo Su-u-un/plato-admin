@@ -35,6 +35,7 @@
             prefix-icon="el-icon-search"
             v-model="input"
             placeholder="用el-autocomplete"
+
           />
         </div>
         <!--意见反馈-->
@@ -149,6 +150,7 @@ export default {
 }
 .searchInput{
   align-items: center;
+  width:200px
 }
 .el-header{
   width: 100%;

@@ -63,7 +63,7 @@ export default {
     setOptions(data){
       this.chart.setOption({
         title: {
-          text: data.device_type + '：' + data.ratio * 100 + "%\n\n" + data.pv,
+          text: data.device_type + '：' + Math.round(data.ratio * 100) + "%\n\n" + data.pv,
           textStyle: {
             color: 'black',
             fontSize: 12

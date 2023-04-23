@@ -1,7 +1,7 @@
 <template>
-    <el-container >
+    <el-container class="space">
       <!--左侧列表-->
-      <el-aside width="200px" style="display: flex;flex-direction: column">
+      <el-aside class="aside" width="200px">
         <!--添加分组-->
         <div class="addGroup">
           <div>
@@ -49,7 +49,7 @@
         </div>
       </el-aside>
       <!--右侧界面-->
-      <link-table :list="group" />
+      <link-table :list="group" class="main"/>
     </el-container>
 </template>
 
@@ -111,15 +111,21 @@ export default {
 </script>
 
 <style scoped>
-.el-container{
+.space{
   padding: 0;
   margin: 0;
   height:100%;
+  width: 100%;
 }
-.el-aside {
+.aside {
+  display: flex;
+  flex-direction: column;
   background-color: #FFFFFF;
   color: #333;
   text-align: center;
+}
+.main{
+ width: 100%;
 }
 .addGroup{
   display: flex;
@@ -135,9 +141,6 @@ export default {
 }
 .addGroup span{
   font-size: 12px;
-}
-.btn{
-
 }
 .el-button{
   width:30px;

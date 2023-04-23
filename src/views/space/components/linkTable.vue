@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height:100%;">
+  <el-container>
     <el-main>
       <div class="dataCard">
         <!--短链添加-->
@@ -86,7 +86,7 @@
             ref="tableRef"
             fit
             :row-style="{height: '80px'}"
-            height="700"
+            height=100%
 
             style="width: 100%;overflow: auto">
             <!--多选框表头-->
@@ -254,7 +254,7 @@
           </el-table>
         </div>
         <!--弹出的数据表-->
-        <el-dialog :visible.sync="Visible" >
+        <el-dialog :visible.sync="Visible">
           <div slot="title">
             {{this.dialogData.title}}
           </div>
@@ -642,14 +642,13 @@ export default {
 </script>
 
 <style scoped>
-/deep/ .el-dialog{
-
-  width:1000px !important;
-}
+/*.el-dialog{*/
+/*  width:1000px !important;*/
+/*}*/
 .dataCard{
   display: flex;
   flex-direction: column;
-  /*width: 100%;*/
+  width: 100%;
   height: 100%;
   background-color: white;
 }
@@ -662,8 +661,8 @@ export default {
   text-align: center;
 }
 .linkData{
-  /*width:100%;*/
-  height: 100%;
+  display: flex;
+  flex: 1;
 }
 .el-table .icon{
   font-size: 30px;
