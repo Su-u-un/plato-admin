@@ -9,18 +9,19 @@
               style="margin-right: 10px"
               type="text"
               v-model="link"
-              placeholder="请输入http://或https://开头的链接"
+              placeholder="请输入http://或https://开头的链接或应用跳转链接"
               :clearable=true
               >
             </el-input>
             <el-button style="margin-right: 10px" type="primary" @click="createLink()">创建短链</el-button>
+            <!--创建短链弹框-->
             <el-dialog title="创建短链" :visible.sync="dialogCreateLink" class="dialogClass">
               <div class="dialogBody">
-                <div class="dialogTabbar">
-                  <div class="tabBarItem" :class="{active:this.normal}" @click="normalSkip()">普通跳转</div>
-                  <div class="tabBarItem" :class="{active:this.random}" @click="randomSkip()">随机跳转</div>
-                  <div class="tabBarItem" :class="{active:this.uniapp}" @click="uniappSkip()">小程序短链</div>
-                </div>
+<!--                <div class="dialogTabbar">-->
+<!--                  <div class="tabBarItem" :class="{active:this.normal}" @click="normalSkip()">普通跳转</div>-->
+<!--                  <div class="tabBarItem" :class="{active:this.random}" @click="randomSkip()">随机跳转</div>-->
+<!--                  <div class="tabBarItem" :class="{active:this.uniapp}" @click="uniappSkip()">小程序短链</div>-->
+<!--                </div>-->
                 <div v-show="this.normal">
                   <el-form
                     ref="normal"
@@ -29,10 +30,16 @@
                     label-width="80px"
                     label-position="top">
                     <el-form-item label="跳转链接" prop="original_url">
-                      <el-input v-model="form.original_url"></el-input>
+                      <el-input
+                        v-model="form.original_url"
+                        placeholder="请输入http://或https://开头的链接或应用跳转链接"/>
                     </el-form-item>
                     <el-form-item label="短链标题" prop="title">
-                      <el-input  v-model="form.title"></el-input>
+                      <el-input
+                        type="textarea"
+                        :rows="3"
+                        v-model="form.title"
+                        placeholder="请输入"/>
                     </el-form-item>
                     <el-form-item label="短链分组" prop="name">
                       <el-select v-model="form.name">
@@ -60,19 +67,19 @@
                       >
                       </el-date-picker>
                     </el-form-item>
-                    <el-form-item>
-                      <el-button type="primary" @click="submitLink(form,expired)">创建</el-button>
-                      <el-button>取消</el-button>
-                    </el-form-item>
                   </el-form>
                 </div>
-                <div v-show="this.random">
-                  <el-input v-model="link"></el-input>
-                </div>
-                <div v-show="this.uniapp">
-                  小程序链接的栏目
-                </div>
+<!--                <div v-show="this.random">-->
+<!--                  <el-input v-model="link"></el-input>-->
+<!--                </div>-->
+<!--                <div v-show="this.uniapp">-->
+<!--                  小程序链接的栏目-->
+<!--                </div>-->
               </div>
+              <template slot="footer">
+                <el-button type="primary" @click="submitLink(form,expired)">创建</el-button>
+                <el-button>取消</el-button>
+              </template>
             </el-dialog>
 
             <el-button>批量创建</el-button>
@@ -159,7 +166,7 @@
               </template>
             </el-table-column>
             <!--访问次数-->
-            <el-table-column prop="pv" min-width="80">
+            <el-table-column prop="pv" min-width="100">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
@@ -187,7 +194,7 @@
               </template>
             </el-table-column>
             <!--访问人数-->
-            <el-table-column prop="uv" min-width="80">
+            <el-table-column prop="uv" min-width="100">
               <!--表头嵌套模板-->
               <template slot="header">
                 <el-tooltip
@@ -642,9 +649,6 @@ export default {
 </script>
 
 <style scoped>
-/*.el-dialog{*/
-/*  width:1000px !important;*/
-/*}*/
 .dataCard{
   display: flex;
   flex-direction: column;
@@ -658,7 +662,6 @@ export default {
 .el-container {
   background-color: #E9EEF3;
   color: #333;
-  text-align: center;
 }
 .linkData{
   display: flex;
@@ -681,18 +684,18 @@ export default {
   width:100%
 }
 .dialogBody{
-  height:500px;
   overflow: auto;
 }
-.dialogClass /deep/ .el-dialog__body{
-  padding: 0 !important;
-}
+/*.dialogClass /deep/ .el-dialog__body{*/
+/*  padding: 0 !important;*/
+/*}*/
 .tabBarItem{
   padding:8px 16px;
   margin-left: 16px;
   cursor: pointer;
 }
 .footer{
+  text-align: center;
   margin-top: 15px;
   padding: 0;
 }
