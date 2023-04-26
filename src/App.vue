@@ -38,7 +38,4 @@ body{
   margin: 0;
   height:100%;
 }
-.nav{
-
-}
 </style>

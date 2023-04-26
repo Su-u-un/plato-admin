@@ -5,7 +5,7 @@
         <!--添加分组-->
         <div class="addGroup">
           <div>
-            短链分组<span>&nbsp&nbsp&nbsp共{{count}}组</span>
+            短链分组<span>共{{count}}组</span>
           </div>
           <div style="background-color: white;height: 70px;line-height: 70px;">
             <el-button
@@ -59,7 +59,7 @@ import groupList from "./components/groupList";
 import linkTable from "./components/linkTable";
 
 export default {
-  name: "space",
+  name: "oneSpace",
   data(){
     return{
       title:'',

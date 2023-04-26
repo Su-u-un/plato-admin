@@ -114,7 +114,7 @@
 import {setToken} from "@/utils/localStorage";
 
 export default {
-  name: "login",
+  name: "oneLogin",
   data(){
     //手机号校验规则
     var checkPhone = (rule, value, callback) => {

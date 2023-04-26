@@ -121,7 +121,7 @@
               <template v-slot="{row}">
                 <div  style="display: flex;align-items: center">
                   <div class="icon">
-                    <i class="el-icon-platform-eleme"></i>
+                    <i class="el-icon-platform-eleme"/>
                   </div>
                   <div>
                     <div class="row1">
@@ -260,9 +260,12 @@
             </el-table-column>
           </el-table>
         </div>
-        <!--弹出的数据表-->
+        <!--查看数据表-->
         <el-dialog :visible.sync="Visible">
           <div slot="title">
+            <div class="icon">
+              <i class="el-icon-platform-eleme"/>
+            </div>
             {{this.dialogData.title}}
           </div>
           <div>
@@ -316,11 +319,11 @@
 
 <script>
 //组件
-import dataForm from "../../../components/common/dataForm/dataForm";
-import dataList from "../../../components/common/dataList/dataList";
+import dataForm from "@/components/common/dataForm/dataForm";
+import dataList from "@/components/common/dataList/dataList";
 //网络请求
-import {createLink, pageLink} from "../../../network/link/shortLink";
-import {getTrend} from "../../../network/visual/statistic"
+import {createLink, pageLink} from "@/network/link/shortLink";
+import {getTrend} from "@/network/visual/statistic"
 
 export default {
   name: "listData",
@@ -528,7 +531,7 @@ export default {
       }else{
         this.expired = this.form.date
       }
-      createLink(group_id, title, original_url, domain_id, expired).then(res=>{
+      createLink(group_id, title, original_url, domain_id, expired).then(()=>{
         this.$message.success('创建短链成功')
         //刷新表单
         this.pageLink(this.currentPage,this.pageSize,this.$store.state.group.id)
@@ -648,7 +651,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dataCard{
   display: flex;
   flex-direction: column;
@@ -663,6 +666,7 @@ export default {
   background-color: #E9EEF3;
   color: #333;
 }
+
 .linkData{
   display: flex;
   flex: 1;
@@ -703,7 +707,7 @@ export default {
   background-color: pink;
 }
 /*去除el-table的x滚动条*/
-/deep/.el-table--scrollable-x ::-webkit-scrollbar {
+.el-table--scrollable-x ::-webkit-scrollbar {
   display: none;
 }
 </style>

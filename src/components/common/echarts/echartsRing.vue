@@ -109,7 +109,7 @@ export default {
         series: [
           {
             type: 'bar',
-            data: [, , data.ratio*100],
+            data: [undefined, undefined, data.ratio*100],
             z: 1,
             coordinateSystem: 'polar',
             barMaxWidth: 5,
@@ -121,7 +121,7 @@ export default {
           {
             // 浅色背景
             type: 'bar',
-            data: [, , 100-data.ratio*100],
+            data: [undefined, undefined, 100-data.ratio*100],
             z: 0,
             silent: true,
             coordinateSystem: 'polar',
