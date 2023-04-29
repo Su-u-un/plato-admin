@@ -261,30 +261,38 @@
           </el-table>
         </div>
         <!--查看数据表-->
-        <el-dialog :visible.sync="Visible">
-          <div slot="title">
-            <div class="icon">
-              <i class="el-icon-platform-eleme"/>
-            </div>
-            {{this.dialogData.title}}
-          </div>
+        <el-dialog :visible.sync="Visible" width="900px">
+
           <div>
-            <!--日期选择器-->
-            <div style="display: flex">
-              <div>
-                <div class="tabbarItem" :class="{active:formContent}" @click="contentSkip()">数据图表</div>
-                <div class="tabbarItem" :class="{active:formHistory}" @click="historySkip()">访问记录</div>
+            <div class="dataTitle">
+              <!--标题-->
+              <div class="row">
+                <div class="icon">
+                  <i class="el-icon-platform-eleme"/>
+                </div>
+                <div class="column">
+                  <span class="title">{{this.dialogData.title}}</span>
+                  <span>{{this.dialogData.original_url}}</span>
+                </div>
               </div>
-              <div>
-                <el-date-picker
-                  v-model="dialogDate"
-                  value-format="timestamp"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :picker-options="pickerOptions2">
-                </el-date-picker>
+              <div class="row tabBar">
+                <!--图表和访问记录切换-->
+                <div class="row dialogTabbar">
+                  <div class="tabBarItem" :class="{active:formContent}" @click="contentSkip()">数据图表</div>
+                  <div class="tabBarItem" :class="{active:formHistory}" @click="historySkip()">访问记录</div>
+                </div>
+                <!--日期选择-->
+                <div>
+                  <el-date-picker
+                      v-model="dialogDate"
+                      value-format="timestamp"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions2">
+                  </el-date-picker>
+                </div>
               </div>
             </div>
             <!--数据图表-->
@@ -319,8 +327,8 @@
 
 <script>
 //组件
-import dataForm from "@/components/common/dataForm/dataForm";
-import dataList from "@/components/common/dataList/dataList";
+import dataForm from "@/views/space/components/dataView/dataForm";
+import dataList from "@/views/space/components/dataView/dataList";
 //网络请求
 import {createLink, pageLink} from "@/network/link/shortLink";
 import {getTrend} from "@/network/visual/statistic"
@@ -666,10 +674,19 @@ export default {
   background-color: #E9EEF3;
   color: #333;
 }
-
 .linkData{
   display: flex;
   flex: 1;
+}
+.dataTitle{
+  display: flex;
+  flex-direction: column;
+  .icon{
+    font-size: 36px;
+  };
+  .title{
+    font-size: 36px;
+  }
 }
 .el-table .icon{
   font-size: 30px;
@@ -684,8 +701,8 @@ export default {
   line-height: 18px;
 }
 .dialogTabbar{
-  display: flex;
-  width:100%
+  line-height: 40px;
+  height: 40px;
 }
 .dialogBody{
   overflow: auto;
@@ -693,9 +710,13 @@ export default {
 /*.dialogClass /deep/ .el-dialog__body{*/
 /*  padding: 0 !important;*/
 /*}*/
+.tabBar{
+  margin-top: 40px;
+  justify-content: space-between;
+}
 .tabBarItem{
-  padding:8px 16px;
-  margin-left: 16px;
+  //width: 64px;
+  margin-right: 16px;
   cursor: pointer;
 }
 .footer{
@@ -704,7 +725,7 @@ export default {
   padding: 0;
 }
 .active{
-  background-color: pink;
+  background-color: #dcdfe6;
 }
 /*去除el-table的x滚动条*/
 .el-table--scrollable-x ::-webkit-scrollbar {

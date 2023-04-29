@@ -19,10 +19,6 @@ export default {
       type: String,
       default: '350px'
     },
-    autoResize: {
-      type: Boolean,
-      default: true
-    },
     chartData: {
       type: Array,
       required: true
@@ -155,6 +151,12 @@ export default {
               //图形上的文本标签，可用于说明图形的一些数据信息
               show: true,
             },
+            // roam: true, //支持拖拽缩放
+            // scaleLimit: {
+            //   //滚轮缩放的极限控制
+            //   min: 0.5, //缩放最小大小
+            //   max: 6, //缩放最大大小
+            // },
           },
           {
             type: "scatter",
@@ -171,12 +173,5 @@ export default {
 };
 </script>
 <style scoped>
-.chinaEcharts {
-  width: 100%;
-  height: 500px;
-}
-#mapChart {
-  width: 100%;
-  height: 500px;
-}
+
 </style>

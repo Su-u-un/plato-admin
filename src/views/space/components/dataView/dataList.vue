@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {getPage} from "../../../network/visual/statistic";
+import {getPage} from "../../../../network/visual/statistic";
 
 
 export default {

@@ -1,11 +1,13 @@
 <template>
   <div>
     <!--访问曲线-->
-    <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <div class="tabBar">
-        tabbar
-        <el-button @click="lineIsShow = !lineIsShow">切换</el-button>
-      </div>
+    <div style="background:#fff;margin-top:30px;">
+      <nav-bar>
+        访问曲线
+        <template v-slot:right>
+          <el-button @click="lineIsShow = !lineIsShow">切换为列表</el-button>
+        </template>
+      </nav-bar>
       <div style="display: flex;margin-top: 20px" v-show="lineIsShow">
         <div style="width: 150px">
           <div class="legendItem">访问次数:{{line.pv}}</div>
@@ -24,11 +26,13 @@
       </div>
     </div>
     <!--访问地区-->
-    <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <div class="tabBar">
+    <div style="background:#fff;margin-top:30px;">
+      <nav-bar>
         访问地区
-        <el-button @click="regionIsShow = !regionIsShow">切换显示uv</el-button>
-      </div>
+        <template v-slot:right>
+          <el-button @click="regionIsShow = !regionIsShow">切换显示uv</el-button>
+        </template>
+      </nav-bar>
       <div style="display: flex;margin-top: 20px">
         <div style="width: 150px">
           <div class="legendItem">TOP1-省份</div>
@@ -38,74 +42,71 @@
       </div>
     </div>
     <!--24h访问曲线-->
-    <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <div class="tabBar">
-        24h分布
-      </div>
+    <div style="height:300px;background:#fff;margin-top:30px;">
+      <nav-bar>
+          24h分布
+      </nav-bar>
       <div>
-        如果做页面实时单日选择，渲染慢，先不写；
-        如果后台日期计算日期然后按24h分类加减，代码傻还多，先不写。
-        周分布同理。
 <!--        <echarts-bar :chart-data="barChartData"/>-->
       </div>
     </div>
     <!--饼图们-->
     <div style="display: flex;justify-content: space-between;flex-wrap: wrap;width:100%">
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           高频访问IP
-        </div>
+        </nav-bar>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           一周分布
-        </div>
+        </nav-bar>
         <div>
 <!--          <echarts-bar />-->
         </div>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           操作系统
-        </div>
+        </nav-bar>
         <div>
           <echarts-bar1 :chart-data="os"/>
         </div>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           访问浏览器
-        </div>
+        </nav-bar>
         <div>
           <echarts-bar1 :chart-data="browser"/>
         </div>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           访问类型
-        </div>
+        </nav-bar>
         <div>
 
         </div>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           访问网络
-        </div>
+        </nav-bar>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           访问设备
-        </div>
-        <div style="display: flex">
+        </nav-bar>
+        <div class="row">
           <echarts-ring :chart-data="device[0]"/>
           <echarts-ring :chart-data="device[1]"/>
         </div>
       </div>
-      <div style="width:50%;height:300px;margin-bottom: 48px">
-        <div class="tabBar">
+      <div style="width:400px;height:300px;margin-bottom: 48px">
+        <nav-bar>
           访问来源
-        </div>
+        </nav-bar>
       </div>
     </div>
   </div>
@@ -113,14 +114,15 @@
 
 <script>
 //组件
-import echartsLine from "../echarts/echartsLine";
-import echartsChina from "../echarts/echartsChina";
-import echartsRing from "../echarts/echartsRing";
-import echartsBar1 from "../echarts/echartsBar1";
+import navBar from "@/views/space/components/dataView/components/viewNavBar";
+import echartsLine from "../../../../components/common/echarts/echartsLine";
+import echartsChina from "../../../../components/common/echarts/echartsChina";
+import echartsRing from "../../../../components/common/echarts/echartsRing";
+import echartsBar1 from "../../../../components/common/echarts/echartsBar1";
 
 
 //网络请求
-import {getTrend,getRegion,getType} from "../../../network/visual/statistic";
+import {getTrend,getRegion,getType} from "@/network/visual/statistic";
 
 export default {
   name: "dataForm",
@@ -135,6 +137,7 @@ export default {
     }
   },
   components:{
+    navBar,
     echartsLine,
     echartsChina,
     echartsRing,
@@ -352,13 +355,6 @@ export default {
 </script>
 
 <style scoped>
-.tabBar{
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 700;
-  padding-bottom: 10px;
-  border-bottom: 2px solid black;
-}
 .legendItem{
   margin-bottom: 10px;
 }

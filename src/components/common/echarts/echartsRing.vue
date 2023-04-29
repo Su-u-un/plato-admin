@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :style="{height:height,width:width}" />
 </template>
 
 
@@ -9,21 +9,13 @@ import echarts from "echarts";
 export default {
   name: "echartsPie",
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
     width: {
       type: String,
       default: '100%'
     },
     height: {
       type: String,
-      default: '350px'
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
+      default: '300px'
     },
     chartData: {
       type: Object,
@@ -103,8 +95,8 @@ export default {
           z: 10,
         },
         polar: {
-          radius: '60%',
-
+          //环形大小
+          radius: '80%',
         },
         series: [
           {
