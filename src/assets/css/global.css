@@ -13,6 +13,20 @@ html,body,#app{
   display: flex;
   flex-direction: row;
 }
+/*高度100%*/
+.h1{
+  height:100%;
+}
+/*字体8px*/
+.f8{
+  font-size: 8px;
+}
+/*flex填充*/
+.flex1{
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
 .mouse{
   cursor: pointer;
 }

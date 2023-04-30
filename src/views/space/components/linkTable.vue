@@ -77,8 +77,8 @@
 <!--                </div>-->
               </div>
               <template slot="footer">
-                <el-button type="primary" @click="submitLink(form,expired)">创建</el-button>
-                <el-button>取消</el-button>
+                <el-button @click="dialogCreateLink=false">取消</el-button>
+                <el-button type="primary" @click="submitLink(form,expired)">确认</el-button>
               </template>
             </el-dialog>
 
@@ -335,9 +335,6 @@ import {getTrend} from "@/network/visual/statistic"
 
 export default {
   name: "listData",
-  props:{
-    list:[]
-  },
   components:{
     dataForm,
     dataList

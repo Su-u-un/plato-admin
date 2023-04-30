@@ -53,3 +53,17 @@ export function getTrend(code,start,end){
     }
   })
 }
+//访问来源top
+export function getTop(code,start,end,n){
+  return visual({
+    method:'post',
+    url:'/visual/v1/referer',
+    header:{'Content-Type':'application/json'},
+    data:{
+      'code':code,
+      'start':start,
+      'end':end,
+      'n':n
+    }
+  })
+}

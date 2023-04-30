@@ -1,6 +1,6 @@
 import {getLogin,register} from "@/network/account/user";
 import {getImageCode,getMesCode} from "@/network/account/verify";
-import {createGroup,listGroup} from "@/network/link/group"
+import {createGroup,listGroup,delGroup,dataLink} from "@/network/link/group"
 
 
 export default {
@@ -52,6 +52,14 @@ export default {
   //获取分组
   linkGroup() {
     return listGroup().then(res=>{
+      return res
+    }).catch(err=>{
+      return err
+    })
+  },
+  //删除分组
+  delGroup(commit,group_id){
+    return delGroup(group_id).then(res=>{
       return res
     }).catch(err=>{
       return err

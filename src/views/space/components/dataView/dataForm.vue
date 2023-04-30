@@ -115,14 +115,14 @@
 <script>
 //组件
 import navBar from "@/views/space/components/dataView/components/viewNavBar";
-import echartsLine from "../../../../components/common/echarts/echartsLine";
-import echartsChina from "../../../../components/common/echarts/echartsChina";
-import echartsRing from "../../../../components/common/echarts/echartsRing";
-import echartsBar1 from "../../../../components/common/echarts/echartsBar1";
+import echartsLine from "@/components/common/echarts/echartsLine";
+import echartsChina from "@/components/common/echarts/echartsChina";
+import echartsRing from "@/components/common/echarts/echartsRing";
+import echartsBar1 from "@/components/common/echarts/echartsBar1";
 
 
 //网络请求
-import {getTrend,getRegion,getType} from "@/network/visual/statistic";
+import {getTrend,getRegion,getType,getTop} from "@/network/visual/statistic";
 
 export default {
   name: "dataForm",
@@ -213,6 +213,12 @@ export default {
     }
   },
   methods:{
+    test(code,date){
+      getTop(code,date[0],date[1]).then(res=>{
+        console.log(res);
+      })
+    },
+
     //访问曲线数据请求
     async dataLine(){
       this.lineChartData = await this.lineTrend(this.dataCode,this.dataDate)
