@@ -50,14 +50,15 @@
 <!--        <echarts-bar :chart-data="barChartData"/>-->
       </div>
     </div>
+
     <!--饼图们-->
-    <div style="display: flex;justify-content: space-between;flex-wrap: wrap;width:100%">
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+    <div class="viewBlocks">
+      <div class="viewBlock">
         <nav-bar>
           高频访问IP
         </nav-bar>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           一周分布
         </nav-bar>
@@ -65,7 +66,7 @@
 <!--          <echarts-bar />-->
         </div>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           操作系统
         </nav-bar>
@@ -73,7 +74,7 @@
           <echarts-bar1 :chart-data="os"/>
         </div>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           访问浏览器
         </nav-bar>
@@ -81,7 +82,7 @@
           <echarts-bar1 :chart-data="browser"/>
         </div>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           访问类型
         </nav-bar>
@@ -89,12 +90,12 @@
 
         </div>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           访问网络
         </nav-bar>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           访问设备
         </nav-bar>
@@ -103,10 +104,22 @@
           <echarts-ring :chart-data="device[1]"/>
         </div>
       </div>
-      <div style="width:400px;height:300px;margin-bottom: 48px">
+      <div class="viewBlock">
         <nav-bar>
           访问来源
         </nav-bar>
+        <div style="margin-top: 18px">
+          <ul class="list">
+            <li
+                v-for="(item,index) in this.topData"
+                :key="index"
+                class="list-item"
+            >
+              <div>{{item.referer||'未知源'}}</div>
+              <div>{{item.pv}}次</div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -119,10 +132,6 @@ import echartsLine from "@/components/common/echarts/echartsLine";
 import echartsChina from "@/components/common/echarts/echartsChina";
 import echartsRing from "@/components/common/echarts/echartsRing";
 import echartsBar1 from "@/components/common/echarts/echartsBar1";
-
-
-//网络请求
-import {getTrend,getRegion,getType,getTop} from "@/network/visual/statistic";
 
 export default {
   name: "dataForm",
@@ -209,16 +218,12 @@ export default {
           ratio:0,
           pv:0
         }
-      ]
+      ],
+      //top数据
+      topData:[]
     }
   },
   methods:{
-    test(code,date){
-      getTop(code,date[0],date[1]).then(res=>{
-        console.log(res);
-      })
-    },
-
     //访问曲线数据请求
     async dataLine(){
       this.lineChartData = await this.lineTrend(this.dataCode,this.dataDate)
@@ -226,6 +231,8 @@ export default {
     //请求ipuvpv
     //得到这段日期间的每天的访问数据
     async lineTrend(code,date){
+      const start = date[0]
+      const end = date[1]
       let line = {
         pv:[],
         uv:[],
@@ -237,7 +244,7 @@ export default {
       let pvNum = 0
       let uvNum = 0
       let n = []
-      await getTrend(code,date[0],date[1]).then(res=>{
+      await this.$store.dispatch('getTrend',{code,start,end}).then(res=>{
         if(res.data.data!==0){
           for(let obj of res.data.data){
             //左侧统计
@@ -276,9 +283,11 @@ export default {
     },
     //请求地区uvpv
     async regionTrend(code,date){
+      const start = date[0]
+      const end = date[1]
       let pv = []
       let uv = []
-      await getRegion(code,date[0],date[1]).then(res=>{
+      await this.$store.dispatch('getRegion',{code,start,end}).then(res=>{
         for (let obj of res.data.data) {
           pv.push({
             name: obj.province.slice(0,2),
@@ -340,12 +349,31 @@ export default {
     },
     //请求浏览器指纹
     async fingerPrint(code,date){
+      const start = date[0]
+      const end = date[1]
       let temp = []
-      await getType(code,date[0],date[1]).then(res=>{
+      await this.$store.dispatch('getType',{code,start,end}).then(res=>{
         temp = res.data.data
       })
       return temp
     },
+
+    //接收top数据
+    async dataTop(){
+      this.topData = await this.getTop(this.dataCode,this.dataDate)
+    },
+    //获取top数据
+    async getTop(code,date){
+      const start = date[0]
+      const end = date[1]
+      let temp =[]
+      //n多少就请求前n的top
+      let n = 5
+      await this.$store.dispatch('getTop',{code,start,end,n}).then(res=>{
+        temp = res.data.data
+      })
+      return temp
+    }
   },
   watch:{
     dataDate:{
@@ -353,6 +381,7 @@ export default {
         this.dataLine()
         this.dataRegion()
         this.dataType()
+        this.dataTop()
       },
       immediate:true
     },
@@ -363,5 +392,21 @@ export default {
 <style scoped>
 .legendItem{
   margin-bottom: 10px;
+}
+.viewBlocks{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.viewBlock{
+  width:400px;
+  height:300px;
+  margin-bottom: 48px
+}
+.list-item{
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
 }
 </style>

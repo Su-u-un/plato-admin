@@ -1,6 +1,5 @@
 <template>
   <div>
-<!--    <el-button @click="pageData">11</el-button>-->
     <el-table :data="tableData">
       <!--访问时间-->
       <el-table-column
@@ -42,7 +41,6 @@
 </template>
 
 <script>
-import {getPage} from "../../../../network/visual/statistic";
 
 
 export default {
@@ -89,7 +87,7 @@ export default {
     //请求访问记录
     async getPage(code,page,size){
       let temp ={}
-      await getPage(code,page,size).then(res=>{
+      await this.$store.dispatch('getPage',{code,page,size}).then(res=>{
         temp=res.data.data
       })
       return temp

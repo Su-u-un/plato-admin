@@ -11,10 +11,9 @@
         :id="item.id"
         class="list-item"
         @click="dataLink(item)"
-        :class="{isActive:dragId===item.id}"
-        >
+        :class="{isActive:dragId===item.id}">
         <div style="display: flex;padding: 0 20px">
-          <div style="flex: 1;display: flex">
+          <div class="flex1 row">
             <span>
               {{ item.title }}
             </span>
@@ -95,12 +94,6 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.list {
-  margin: 0;
-  list-style: none;
-  padding-left: 0;
-  border: 0;
-}
 .drag-move {
   transition: transform 0.3s;
 }

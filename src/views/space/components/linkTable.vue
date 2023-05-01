@@ -329,9 +329,6 @@
 //组件
 import dataForm from "@/views/space/components/dataView/dataForm";
 import dataList from "@/views/space/components/dataView/dataList";
-//网络请求
-import {createLink, pageLink} from "@/network/link/shortLink";
-import {getTrend} from "@/network/visual/statistic"
 
 export default {
   name: "listData",
@@ -530,13 +527,11 @@ export default {
       }
     },
     //确定短链按钮
-    submitLink({group_id, title,  original_url, domain_id}={},expired){
+    submitLink(info,expired){
       if(this.form.temporaryExpired === 'forever'){
-        this.expired = ''
-      }else{
-        this.expired = this.form.date
+        this.form.date = ''
       }
-      createLink(group_id, title, original_url, domain_id, expired).then(()=>{
+      this.$store.dispatch('createLink',info).then(()=>{
         this.$message.success('创建短链成功')
         //刷新表单
         this.pageLink(this.currentPage,this.pageSize,this.$store.state.group.id)
@@ -551,21 +546,20 @@ export default {
     async pageLink(page,size,group_id){
       //定义一个接受分页数据的临时数组
       let n = []
-      let test = []
+      let temp = []
       //数组内填充相应的对象
-      await pageLink(page,size,group_id).then(res=>{
-        test = res.data.data.items
+      await this.$store.dispatch('pageLink',{page,size,group_id}).then(res=>{
+        temp = res.data.data.items
       })
-      if(test.length !== 0){
-        this.link_sum = test.length
-        for(let i =0;i < test.length;i++){
-          const {ipNum,pvNum,uvNum} = await this.todayTrend(test[i].code)
+      if(temp.length !== 0){
+        for(let i =0;i < temp.length;i++){
+          const {ipNum,pvNum,uvNum} = await this.todayTrend(temp[i].code)
           n[i]={
-            code:test[i].code,
-            domain:test[i].domain,
-            create_time:test[i].create_time,
-            original_url:test[i].original_url,
-            title:test[i].title,
+            code:temp[i].code,
+            domain:temp[i].domain,
+            create_time:temp[i].create_time,
+            original_url:temp[i].original_url,
+            title:temp[i].title,
             ip:ipNum,
             uv:pvNum,
             pv:uvNum
@@ -581,7 +575,7 @@ export default {
       let ipNum = 0
       let pvNum = 0
       let uvNum = 0
-      await getTrend(code,start,end).then(res=>{
+      await this.$store.dispatch('getTrend',{code,start,end}).then(res=>{
         for(let obj of res.data.data){
           ipNum = parseInt(obj.ip) + ipNum
           pvNum = parseInt(obj.pv) + pvNum
@@ -648,7 +642,7 @@ export default {
     '$store.state.group'(){
       this.form.name = this.$store.state.group.title
       this.form.group_id = this.$store.state.group.id
-      this.link_sum = this.$store.state.group.link_sum - 0
+      this.link_sum = parseInt(this.$store.state.group.link_sum)
       //改变就更新分页
       this.pageLink(this.currentPage,this.pageSize,this.$store.state.group.id)
     },

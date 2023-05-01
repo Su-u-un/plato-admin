@@ -27,6 +27,13 @@ html,body,#app{
   -ms-flex: 1;
   flex: 1;
 }
+/*取消ul的样式*/
+.list {
+  margin: 0;
+  list-style: none;
+  padding-left: 0;
+  border: 0;
+}
 .mouse{
   cursor: pointer;
 }
