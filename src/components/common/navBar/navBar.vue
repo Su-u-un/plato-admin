@@ -34,7 +34,7 @@
             type="text"
             prefix-icon="el-icon-search"
             v-model="input"
-            placeholder="用el-autocomplete"
+            placeholder="请输入查找关键词"
 
           />
         </div>

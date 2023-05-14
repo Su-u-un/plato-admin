@@ -1,7 +1,7 @@
 import {getLogin,register} from "@/network/account/user";
 import {getImageCode,getMesCode} from "@/network/account/verify";
 
-import {createGroup,listGroup,delGroup,dataLink} from "@/network/link/group"
+import {createGroup,listGroup,delGroup} from "@/network/link/group"
 import {createLink, pageLink} from "@/network/link/shortLink";
 
 import {getTrend,getPage,getRegion,getType,getTop} from "@/network/visual/statistic"

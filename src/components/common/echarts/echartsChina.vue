@@ -1,16 +1,13 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :style="{height:height,width:width}" />
 </template>
 
 <script>
 import echarts from "echarts";
+require('echarts/theme/macarons')
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
     width: {
       type: String,
       default: '100%'
@@ -118,7 +115,6 @@ export default {
               return params.name + ' : ' + '0次'; }
           }
         },
-        //配置地图的数据，并且显示
         series: [
           {
             name: "地图",
@@ -163,7 +159,7 @@ export default {
             showEffectOn: "render", //配置什么时候显示特效
             coordinateSystem: "geo", //该系列使用的坐标系
             symbolSize: 10, //标记的大小
-
+            // roam:true
           },
         ]
       })

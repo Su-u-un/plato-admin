@@ -36,18 +36,38 @@
       <div style="display: flex;margin-top: 20px">
         <div style="width: 150px">
           <div class="legendItem">TOP1-省份</div>
+          <ul>
+            <li v-for="item in this.dataChinaPv"
+                :key="item.name"
+                class="row">
+              <div>
+                {{item.name}}
+              </div>
+              <div>
+                {{item.value}}次
+              </div>
+            </li>
+          </ul>
         </div>
         <echarts-china :chart-data="dataChinaPv" v-if="regionIsShow"/>
         <echarts-china :chart-data="dataChinaUv" v-else/>
       </div>
     </div>
     <!--24h访问曲线-->
-    <div style="height:300px;background:#fff;margin-top:30px;">
+    <div style="background:#fff;margin-top:30px;">
       <nav-bar>
           24h分布
+        <template v-slot:right>
+          <el-date-picker
+              v-model="nowDate"
+              type="date"
+              placeholder="选择日期"
+              value-format="timestamp"
+              :picker-options="pickerOptions"/>
+        </template>
       </nav-bar>
-      <div>
-<!--        <echarts-bar :chart-data="barChartData"/>-->
+      <div :key="nowKey">
+        <echarts-bar2 :chart-data="nowData" :x-axis="[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]"/>
       </div>
     </div>
 
@@ -62,8 +82,8 @@
         <nav-bar>
           一周分布
         </nav-bar>
-        <div>
-<!--          <echarts-bar />-->
+        <div :key="weekKey">
+          <echarts-bar2 :chart-data="weekData" :x-axis="['日','一','二','三','四','五','六']"/>
         </div>
       </div>
       <div class="viewBlock">
@@ -132,12 +152,13 @@ import echartsLine from "@/components/common/echarts/echartsLine";
 import echartsChina from "@/components/common/echarts/echartsChina";
 import echartsRing from "@/components/common/echarts/echartsRing";
 import echartsBar1 from "@/components/common/echarts/echartsBar1";
+import echartsBar2 from "@/components/common/echarts/echartsBar2";
 
 export default {
   name: "dataForm",
   props:{
-    dataCode:{
-      type:String,
+    codeData:{
+      type:Object,
       required: true
     },
     dataDate:{
@@ -150,7 +171,8 @@ export default {
     echartsLine,
     echartsChina,
     echartsRing,
-    echartsBar1
+    echartsBar1,
+    echartsBar2
   },
   data(){
     return{
@@ -170,6 +192,24 @@ export default {
       //省份uv和pv的切换
       regionIsShow:true,
 
+      //当天24h数据的显示
+      nowData:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      //定一个时间显示当日pv
+      nowDate:this.dataDate[1],
+      //刷新组件
+      nowKey:0,
+
+      //一周数据
+      weekData:[0,0,0,0,0,0,0],
+      //刷新组件
+      weekKey:0,
+
+      //时间的限制
+      pickerOptions:{
+        disabledDate:(time)=>{
+          return time.getTime() < this.dataDate[0] ||time.getTime() > this.dataDate[1]
+        },
+      },
       //访问设备
       device:[
         {
@@ -226,7 +266,7 @@ export default {
   methods:{
     //访问曲线数据请求
     async dataLine(){
-      this.lineChartData = await this.lineTrend(this.dataCode,this.dataDate)
+      this.lineChartData = await this.lineTrend(this.codeData.code,this.dataDate)
     },
     //请求ipuvpv
     //得到这段日期间的每天的访问数据
@@ -277,7 +317,7 @@ export default {
 
     //访问地区请求
     async dataRegion(){
-      let temp = await this.regionTrend(this.dataCode,this.dataDate)
+      let temp = await this.regionTrend(this.codeData.code,this.dataDate)
       this.dataChinaPv = temp.pv
       this.dataChinaUv = temp.uv
     },
@@ -302,9 +342,54 @@ export default {
       return {pv,uv};
     },
 
+    //所选日期24h访问数据
+    async dayTrend(start = new Date(new Date().setHours(0, 0, 0, 0)).getTime()){
+      let end = (start + 3600 * 1000 * 8)//加八个小时让后端可以识别为一天
+      const res = await this.Trend(this.codeData.code,start,end)
+      this.nowKey++
+      for(let i = 0;i<res.data.data.length; i++){
+        this.nowData[i] = parseInt(res.data.data[i].pv)
+      }
+    },
+    //一周的访问数据
+    async weekTrend(){
+      const res = await this.Trend(this.codeData.code,this.dataDate[0],this.dataDate[1])
+      this.weekKey++
+      for(let obj of res.data.data){
+        let temp = new Date(obj.interval).getDay()
+        switch (temp){
+          case 0:
+            this.weekData[0] += parseInt(obj.pv)
+            break
+          case 1:
+            this.weekData[1] += parseInt(obj.pv)
+            break
+          case 2:
+            this.weekData[2] += parseInt(obj.pv)
+            break
+          case 3:
+            this.weekData[3] += parseInt(obj.pv)
+            break
+          case 4:
+            this.weekData[4] += parseInt(obj.pv)
+            break
+          case 5:
+            this.weekData[5] += parseInt(obj.pv)
+            break
+          case 6:
+            this.weekData[6] += parseInt(obj.pv)
+            break
+        }
+      }
+    },
+    //请求访问数据
+    async Trend(code,start,end){
+      return await this.$store.dispatch('getTrend',{code,start,end})
+    },
+
     //浏览器指纹处理
     async dataType(){
-      let temp = await this.fingerPrint(this.dataCode,this.dataDate)
+      let temp = await this.fingerPrint(this.codeData.code,this.dataDate)
       //处理访问设备的信息
       for(let obj of temp.device_stats){
         if(obj.device_type === 'Computer'){
@@ -360,7 +445,7 @@ export default {
 
     //接收top数据
     async dataTop(){
-      this.topData = await this.getTop(this.dataCode,this.dataDate)
+      this.topData = await this.getTop(this.codeData.code,this.dataDate)
     },
     //获取top数据
     async getTop(code,date){
@@ -377,14 +462,23 @@ export default {
   },
   watch:{
     dataDate:{
-      handler() {
+      handler(val) {
         this.dataLine()
         this.dataRegion()
         this.dataType()
         this.dataTop()
+        this.weekTrend()
+        this.nowDate = val[1]
+        // this.dayTrend(this.nowDate)
       },
       immediate:true
     },
+    nowDate:{
+      handler(val){
+        this.dayTrend(val)
+      },
+      immediate:true
+    }
   }
 }
 </script>

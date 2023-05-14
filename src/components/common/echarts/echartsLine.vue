@@ -1,16 +1,13 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :style="{height:height,width:width}" />
 </template>
 
 <script>
 import echarts from 'echarts'
+require('echarts/theme/macarons')
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
     width: {
       type: String,
       default: '100%'
@@ -18,10 +15,6 @@ export default {
     height: {
       type: String,
       default: '350px'
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
     },
     chartData: {
       type: Object,
@@ -55,7 +48,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')//选择渲染的dom和主题样式，比如这个马卡龙主题
+      this.chart = echarts.init(this.$el)//选择渲染的dom和主题样式，比如这个马卡龙主题
       this.setOptions(this.chartData)
     },
     setOptions({ xAxis,line } = {}) {//对象的解构赋值

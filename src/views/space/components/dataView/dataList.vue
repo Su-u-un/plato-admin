@@ -46,8 +46,8 @@
 export default {
   name: "dataList",
   props:{
-    dataCode:{
-      type:String,
+    codeDate:{
+      type:Object,
       required:true
     },
     //这里面监听变化加个刷新吧，让人觉得是根据日期变化的
@@ -78,7 +78,7 @@ export default {
     },
     //处理访问记录
     async pageData(){
-      let temp = await this.getPage(this.dataCode,this.currentPage,this.pageSize)
+      let temp = await this.getPage(this.codeData.code,this.currentPage,this.pageSize)
       if(temp.items.length !== 0) {
         this.link_sum = temp.items.length
         this.tableData = temp.items

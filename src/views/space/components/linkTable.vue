@@ -262,7 +262,6 @@
         </div>
         <!--查看数据表-->
         <el-dialog :visible.sync="Visible" width="900px">
-
           <div>
             <div class="dataTitle">
               <!--标题-->
@@ -298,12 +297,12 @@
             <!--数据图表-->
             <data-form
               v-show="formContent"
-              :data-code="this.dialogData.code"
+              :code-data="this.dialogData"
               :data-date="this.dialogDate"/>
             <!--访问列表-->
             <data-list
               v-show="formHistory"
-              :data-code="this.dialogData.code"
+              :code-data="this.dialogData"
               :data-date="this.dialogDate"/>
           </div>
         </el-dialog>
@@ -527,7 +526,7 @@ export default {
       }
     },
     //确定短链按钮
-    submitLink(info,expired){
+    submitLink(info){
       if(this.form.temporaryExpired === 'forever'){
         this.form.date = ''
       }
@@ -597,10 +596,11 @@ export default {
       const end = new Date()
       let start = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
+
       if(start < Date.parse(this.dialogData.create_time)){
         start = Date.parse(this.dialogData.create_time)
       }
-      this.dialogDate = [start,end]
+      this.dialogDate = [start.getTime(),end.getTime()]
     },
     normalSkip(){
       if(!this.normal){

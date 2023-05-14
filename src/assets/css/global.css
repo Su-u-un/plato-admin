@@ -3,12 +3,12 @@ html,body,#app{
   margin: 0;
   padding:0;
 }
-/*行*/
+/*列*/
 .column{
   display: flex;
   flex-direction: column;
 }
-/*列*/
+/*行*/
 .row{
   display: flex;
   flex-direction: row;
